@@ -1,10 +1,11 @@
-#Versão Beta 0.5
+#Versão Beta 0.7
 from os import system as sys
 
 def Clear():
     sys("cls")
 Clear()
 
+Equations_Bank: list = []
 A, B, C, D = True, False, False, False
 Op_Symbols: list = ["~","^","v","<>","->"]
 TestArray: list = ["~",A,"v","(","(",B,"<>",D,"^",B,")","->","~",C,")"]
