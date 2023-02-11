@@ -1,15 +1,10 @@
 #Versão Beta 0.7 (Agora com ViniShows!(E EDUARDO!!!)) <-- Dois viados
-from os import system as sys
+from os import system
 
 def Clear():
-    sys("cls")
-Clear()
+    system("cls")
 
-Equations_Bank: list = []
-A, B, C, D = True, False, False, False
-Op_Symbols: list = ["~","^","v","<>","->"]
-TestArray: list = ["~",A,"v","(","(",B,"<>",D,"^",B,")","->","~",C,")"]
-
+#Função pra realizar operação
 def Operate(symbol: str, a: bool, b: bool):
     #Navegar pelos símbolos e escolher a operação
     match symbol: 
@@ -28,7 +23,9 @@ def Operate(symbol: str, a: bool, b: bool):
             else:
                 return False
 
+#Função pra resolver uma equação
 def Execute(array: list):
+    Op_Symbols: list = ["~","^","v","->","<>"]
     #Procurar parênteses para encontrar as prioridades
     while "(" in array:
         print(' '.join(map(str,array)))
@@ -68,4 +65,14 @@ def Execute(array: list):
     print(array[0])
     return array[0]
 
-Execute(TestArray)
+#Função pra verificar equação
+def Verify(equation: str):
+    pass
+
+#Função pra adicionar equação ao banco
+def Add(bank: list):
+    pass
+
+#Função para mostrar uma equação na tela
+def Show(equation: list):
+    pass
