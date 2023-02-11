@@ -1,4 +1,4 @@
-#Versão Beta 0.7 (Agora com ViniShows!)
+#Versão Beta 0.7 (Agora com ViniShows!(E EDUARDO!!!))
 from os import system as sys
 
 def Clear():
