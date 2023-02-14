@@ -1,8 +1,13 @@
-#Versão Beta 0.7 (Agora com ViniShows!(E EDUARDO!!!)) <-- Dois viados
-from os import system
+import os
+
+Global_Alf = ["P", "Q"]
 
 def Clear():
-    system("cls")
+    os.system("cls")
+
+def SetTitle(string: str):
+    Clear()
+    print(string+"\n")
 
 #Função pra realizar operação
 def Operate(symbol: str, a: bool, b: bool):
@@ -23,7 +28,7 @@ def Operate(symbol: str, a: bool, b: bool):
             else:
                 return False
 
-#Função pra resolver uma equação
+#Função pra resolver uma equação válida
 def Execute(array: list):
     Op_Symbols: list = ["~","^","v","->","<>"]
     #Procurar parênteses para encontrar as prioridades
@@ -65,13 +70,83 @@ def Execute(array: list):
     print(array[0])
     return array[0]
 
-#Função pra verificar equação
-def Verify(equation: str):
-    pass
+#Função para adicionar símbolos possíveis
+def Add_Symbol(possible: list, equation: list, closes: int, ready: bool):
+    comands = [i for i in possible]
+    limit = len(possible)
+    for i in range(len(comands)):
+        if comands[i] == "Variáveis:":
+            sufix = "(" + ",".join(Global_Alf) + ")"
+            limit = len(possible)-1
+        else:
+            sufix = f" ({i+1})"
+        comands[i] += sufix
+    comands = "\n".join(map(str, comands))
+    while True:
+        SetTitle("Adicionar equação")
+        if len(equation):
+            print(f"{' '.join(equation)}\n")
+        if closes == 0 and ready:
+            print("Digite (Pronto) para salvar equação no banco")
+        select = input(f"{comands}\nInput:")
+
+        #Verificar possibilidade da saída
+        if closes == 0 and ready and select.upper() == "PRONTO":
+            return "Exit"
+
+        #Verificar o tipo da entrada
+        try:
+            select = int(select)
+            if 1 <= select <= limit:
+                return select
+        except:
+            if select.upper() in Global_Alf and limit == len(possible)-1:
+                return select.upper()
+            
+#Função pra criar equação
+def Create():
+    new_equation: list = []
+    #Valores iniciais possíveis = "~", "VAR", "("
+    avaiable = ["~","(","Variáveis:"]
+    closes_needed, can_finish = 0, False
+
+    while True:
+        #Iniciar a pedida de símbolos possíveis
+        next_command = Add_Symbol(avaiable, new_equation, closes_needed, can_finish)
+        can_finish = True
+        if next_command == "Exit":
+            break
+        elif type(next_command) == str:
+            new_equation.append(next_command)
+        else:
+            new_equation.append(avaiable[next_command-1])
+        
+        #Filtrar próximas possibilidades e suas consequências
+        if new_equation[-1] in Global_Alf:
+            avaiable = ["^","v","->","<>"]
+        else:
+            match new_equation[-1]:
+                case "~":
+                    can_finish = False
+                    avaiable = ["(", "Variáveis:"]
+                case "^" | "v" | "->" | "<>":
+                    can_finish = False
+                    avaiable = ["~", "(", "Variáveis:"]
+                case "(":
+                    can_finish = False
+                    closes_needed += 1
+                    avaiable = ["~", "(", "Variáveis:"]
+                case ")":
+                    closes_needed -= 1
+                    avaiable = ["^","v","->","<>"]
+        if closes_needed > 0 and new_equation[-1] in Global_Alf:
+            avaiable.insert(0, ")")
+    
+    return new_equation
 
 #Função pra adicionar equação ao banco
-def Add(bank: list):
-    pass
+def Add(equation: list, bank: list):
+    bank.append(equation)
 
 #Função para mostrar uma equação na tela
 def Show(equation: list):
