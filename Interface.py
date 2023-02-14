@@ -2,7 +2,7 @@ import Boolean_Calculator as Calculator
 
 A, B, C, D = True, False, False, False
 TestArray: list = ["~",A,"v","(","(",B,"<>",D,"^",B,")","->","~",C,")"]
-Equations_Bank: list = [1]
+Equations_Bank: list = [TestArray]
 Comands = '''Calculadora Proposicional
 
 A - Adicionar equação
@@ -31,6 +31,9 @@ while True:
                 Calculator.Execute(TestArray)
                 input()
         case "B":
-            pass
+            Calculator.SetTitle("Banco de equações")
+            for i in Equations_Bank:
+                print(" ".join(map(str, i)))
+            input("\nEnter para voltar")
         case "E":
             break
