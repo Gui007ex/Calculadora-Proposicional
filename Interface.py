@@ -2,12 +2,14 @@ import Boolean_Calculator as Calculator
 
 A, B, C, D = True, False, False, False
 TestArray: list = ["~",A,"v","(","(",B,"<>",D,"^",B,")","->","~",C,")"]
-Equations_Bank: list = []
+Equations_Bank: list = [1]
 Comands = '''Calculadora Proposicional
 
-A - Adicionar Equação
-R - Resolver Equação
-E - Sair do Código
+A - Adicionar equação
+R - Resolver equação
+-------------------------
+B - Mostrar banco
+E - Sair do código
 
 Comando:'''
 
@@ -20,8 +22,7 @@ while True:
     match action: 
         case "A":
             Calculator.Add(Calculator.Create(), Equations_Bank)
-            print(Equations_Bank)
-            input()
+            input("Equação adicionada\n\nEnter para continuar")
         case "R":
             print("\n~Resolver equação~\n")
             if len(Equations_Bank) == 0:
@@ -29,5 +30,7 @@ while True:
             else:
                 Calculator.Execute(TestArray)
                 input()
+        case "B":
+            pass
         case "E":
             break

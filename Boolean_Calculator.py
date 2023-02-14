@@ -2,6 +2,7 @@ import os
 
 Global_Alf = ["P", "Q"]
 
+#Funções de utilidade
 def Clear():
     os.system("cls")
 
@@ -113,8 +114,8 @@ def Create():
     while True:
         #Iniciar a pedida de símbolos possíveis
         next_command = Add_Symbol(avaiable, new_equation, closes_needed, can_finish)
-        can_finish = True
         if next_command == "Exit":
+            SetTitle("Adicionar equação\n\n" + " ".join(new_equation))
             break
         elif type(next_command) == str:
             new_equation.append(next_command)
@@ -122,24 +123,23 @@ def Create():
             new_equation.append(avaiable[next_command-1])
         
         #Filtrar próximas possibilidades e suas consequências
-        if new_equation[-1] in Global_Alf:
+        last = new_equation[-1]
+        can_finish = last in Global_Alf or last == ")"
+        if last in Global_Alf:
             avaiable = ["^","v","->","<>"]
         else:
             match new_equation[-1]:
                 case "~":
-                    can_finish = False
                     avaiable = ["(", "Variáveis:"]
                 case "^" | "v" | "->" | "<>":
-                    can_finish = False
                     avaiable = ["~", "(", "Variáveis:"]
                 case "(":
-                    can_finish = False
                     closes_needed += 1
                     avaiable = ["~", "(", "Variáveis:"]
                 case ")":
                     closes_needed -= 1
                     avaiable = ["^","v","->","<>"]
-        if closes_needed > 0 and new_equation[-1] in Global_Alf:
+        if closes_needed > 0 and (last in Global_Alf or last == ")"):
             avaiable.insert(0, ")")
     
     return new_equation
