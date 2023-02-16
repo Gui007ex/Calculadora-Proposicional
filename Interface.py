@@ -25,7 +25,7 @@ while True:
                 Index = Calculator.GetBankEquation(Equations_Bank)
                 if type(Index) == int:
                     result = Calculator.Execute(Calculator.Read(Equations_Bank[Index]), True)
-                    input(f"Resultado da proposição: {result}\n\nEnter para continuar")
+                    input(f"Resultado da proposição: {str(result)}\n\nEnter para continuar")
 
             else:
                 input("Banco vazio, pressione enter para continuar...")

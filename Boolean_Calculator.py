@@ -97,7 +97,7 @@ def Execute(array: list, steps: bool):
                 PriorArray.append(array[i])
         #Remover elementos restantes dos parênteses
         Total_Deletes = len(PriorArray)+1
-        array[Delete_Flag] = Execute(PriorArray)
+        array[Delete_Flag] = Execute(PriorArray, True)
         del array[Delete_Flag+1:Delete_Flag+1+Total_Deletes]
         
     #Passar pelos valores da lista até encontrar uma operação (enquanto seu tamanho for maior que 1)
@@ -120,7 +120,7 @@ def Execute(array: list, steps: bool):
                     array[operation_index-1] = Operate(symbol, a, b)
     if steps:
         SetTitle("Resolver Equação")
-        print(array[0] + "\n")
+        print("".join(map(str, array)) + "\n")
     return array[0]
 
 #Função para adicionar símbolos possíveis
