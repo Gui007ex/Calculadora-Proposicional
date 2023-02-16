@@ -1,2 +1,2 @@
-# Calculadora-Proposicional Beta 0.9
+# Calculadora-Proposicional 1.0
 Trabalho de matemática discreta da faculdade
