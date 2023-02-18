@@ -37,5 +37,5 @@ while True:
                 input("Banco vazio, pressione enter para continuar...")        
         case "E":
             break
-        case Equations_Bank:
+        case _:
             Utility.ChangeColor(action)

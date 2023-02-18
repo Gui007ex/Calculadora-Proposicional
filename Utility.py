@@ -42,6 +42,7 @@ def GetValidInput(title: str, string: str, entry: list):
         SetTitle(title)
 
 def ChangeColor(string: str):
-    colors = ["Azul", "Verde", "Amarelo", "Vermelho"]
+    colors = ["AZUL", "VERDE", "AMARELO", "VERMELHO"]
     codes = ["color 1", "color 2", "color 6", "color 4"]
-    os.system(codes[colors.index(string)])
+    if string in colors:
+        os.system(codes[colors.index(string)])
