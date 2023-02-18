@@ -1,4 +1,5 @@
-import Boolean_Calculator as Calculator
+import Utility, Boolean_Calculator as Calculator
+Utility.ChangeColor("Azul")
 
 Equations_Bank: list = [["~","P","v","Q","^","P"]]
 Comands = '''Calculadora Proposicional
@@ -12,7 +13,7 @@ E - Sair do código
 Comando:'''
 
 while True:
-    Calculator.Clear()
+    Utility.Clear()
     action = input(Comands).upper()
 
     match action: 
@@ -20,20 +21,21 @@ while True:
             Calculator.Add(Calculator.Create(), Equations_Bank)
             input("Equação adicionada\n\nEnter para continuar")
         case "R":
-            Calculator.SetTitle("Resolver equação")
-            if len(Equations_Bank):
-                Index = Calculator.GetBankEquation(Equations_Bank)
-                if type(Index) == int:
-                    result = Calculator.Execute(Calculator.Read(Equations_Bank[Index]), True)
-                    input(f"Resultado da proposição: {str(result)}\n\nEnter para continuar")
-
-            else:
-                input("Banco vazio, pressione enter para continuar...")
+            ambient = "Resolver equação"
+            Utility.SetTitle(ambient)
+            Index = Utility.GetBankEquation(Equations_Bank, ambient)
+            if type(Index) == int:
+                equation = Equations_Bank[Index]
+                result = Calculator.Execute(Calculator.Read(equation), True, [])
+                input(f"Resultado da proposição: {str(result)}\n\nEnter para continuar")
         case "B":
-            Calculator.SetTitle("Banco de equações")
+            Utility.SetTitle("Banco de proposições")
             if len(Equations_Bank):
-                Calculator.ShowBank(Equations_Bank)
+                Utility.ShowBank(Equations_Bank)
+                input("Enter para voltar")
             else:
-                input("Banco vazio, pressione enter para continuar...")
+                input("Banco vazio, pressione enter para continuar...")        
         case "E":
             break
+        case Equations_Bank:
+            Utility.ChangeColor(action)

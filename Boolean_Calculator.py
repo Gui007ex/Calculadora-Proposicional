@@ -1,44 +1,6 @@
-import os
+import Utility
 
 Global_Alf = ["P", "Q"]
-
-#Funções de utilidade
-def Clear():
-    os.system("cls")
-
-def SetTitle(string: str):
-    Clear()
-    print(string+"\n")
-
-def ShowBank(bank: list):
-    for i in range(len(bank)):
-        show =  " ".join(map(str, bank[i]))
-        print(f"{i+1} --> {show}")
-
-def GetBankEquation(bank: list):
-    selecting = True
-    while selecting:
-        ShowBank(bank)
-        try:
-            select = input("\nSelecione uma equação:")
-            if 0 < int(select) <= len(bank):
-                selecting = False
-            else:
-                input("\nEquação não existe")
-        except:
-            if select.upper() == "E":
-                return "Exit"
-        if selecting:
-            SetTitle("Resolver equação")
-    return int(select)-1
-
-def GetValidInput(title: str, string: str, entry: list):
-    SetTitle(title)
-    while True:
-        _input = input(string)
-        if _input in entry or _input.upper() in entry:
-            return _input
-        SetTitle(title)
 
 #Função pra realizar operação
 def Operate(symbol: str, a: bool, b: bool):
@@ -65,25 +27,27 @@ def Read(equation: list):
     this_title = f"Resolver equação\n\n" + " ".join(map(str, sub_equation))
     for Letter in Global_Alf:
         if Letter in sub_equation:
-            value = GetValidInput(this_title, f"Valor de {Letter} (V ou F):", ["V","F"])
+            value = Utility.GetValidInput(this_title, f"Valor de {Letter} (V ou F):", ["V","F"])
             value = value.upper() == "V"
             while Letter in sub_equation:
                 next_change = sub_equation.index(Letter)
                 sub_equation[next_change] = value
                 this_title = f"Resolver equação\n\n" + " ".join(map(str, sub_equation))
-    SetTitle(this_title)
+    Utility.SetTitle(this_title)
     input("Equação pronta, enter para resolver")
+    Utility.SetTitle("Resolver equação")
     return sub_equation
 
 #Função pra resolver uma equação válida
-def Execute(array: list, steps: bool):
+def Execute(array: list, steps: bool, mask: list):
+    title = "Resolver Equação"
     Op_Symbols = ["~","^","v","->","<>"]
     #Procurar parênteses para encontrar as prioridades
     while "(" in array:
+        mask = [i for i in array]
         if steps:
-            SetTitle("Resolver equação")
+            Utility.SetTitle(title)
             print(' '.join(map(str,array)))
-            input()
         building = False
         #Construir o interior dos elementos dentro dos parênteses
         for i in range(len(array)):
@@ -95,10 +59,13 @@ def Execute(array: list, steps: bool):
                 break
             elif building:
                 PriorArray.append(array[i])
-        #Remover elementos restantes dos parênteses
+        #Remover elementos restantes dos parênteses e criar máscara para interface
+        #mask = [[antes], [meio], [depois]]
         Total_Deletes = len(PriorArray)+1
-        array[Delete_Flag] = Execute(PriorArray, True)
+        mask = [array[:Delete_Flag+1], array[Delete_Flag+Total_Deletes:]]
+        array[Delete_Flag] = Execute(PriorArray, True, mask)
         del array[Delete_Flag+1:Delete_Flag+1+Total_Deletes]
+        mask = []
         
     #Passar pelos valores da lista até encontrar uma operação (enquanto seu tamanho for maior que 1)
     while len(array) > 1:
@@ -107,8 +74,11 @@ def Execute(array: list, steps: bool):
             #Manter aquele símbolo até efetuar todos
             while symbol in array:
                 if steps:
-                    SetTitle("Resolver equação")
-                    print(" ".join(map(str, array)))
+                    Utility.SetTitle(title)
+                    if len(mask):
+                        print(" ".join(map(str, mask[0])), " ".join(map(str, array)), " ".join(map(str, mask[1])))
+                    else:
+                        print(" ".join(map(str, array)))
                     input()
                 #Encontrar próxima operação com sinal de inversão de valor
                 operation_index = array.index(symbol)
@@ -119,8 +89,8 @@ def Execute(array: list, steps: bool):
                     a, b = array.pop(operation_index-1), array.pop(operation_index)
                     array[operation_index-1] = Operate(symbol, a, b)
     if steps:
-        SetTitle("Resolver Equação")
-        print("".join(map(str, array)) + "\n")
+        Utility.SetTitle(title)
+        print(str(array[0]) + "\n")
     return array[0]
 
 #Função para adicionar símbolos possíveis
@@ -136,7 +106,7 @@ def Add_Symbol(possible: list, equation: list, closes: int, ready: bool):
         comands[i] += sufix
     comands = "\n".join(map(str, comands))
     while True:
-        SetTitle("Adicionar equação")
+        Utility.SetTitle("Adicionar equação")
         if len(equation):
             print(f"{' '.join(equation)}\n")
         if closes == 0 and ready:
@@ -167,7 +137,7 @@ def Create():
         #Iniciar a pedida de símbolos possíveis
         next_command = Add_Symbol(avaiable, new_equation, closes_needed, can_finish)
         if next_command == "Exit":
-            SetTitle("Adicionar equação\n\n" + " ".join(new_equation))
+            Utility.SetTitle("Adicionar equação\n\n" + " ".join(new_equation))
             break
         elif type(next_command) == str:
             new_equation.append(next_command)
