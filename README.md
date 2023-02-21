@@ -1,2 +1,2 @@
-# Calculadora-Proposicional 1.0
+# Calculadora-Proposicional 1.1
 Trabalho de matemática discreta da faculdade
