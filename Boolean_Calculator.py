@@ -24,7 +24,7 @@ def Operate(symbol: str, a: bool, b: bool):
 #Função para ler equação
 def Read(equation: list):
     sub_equation = [i for i in equation]
-    this_title = f"Resolver equação\n\n" + " ".join(map(str, sub_equation))
+    this_title = f"Resolver equação\n\n" + Utility.ShowEq(sub_equation)
     for Letter in Global_Alf:
         if Letter in sub_equation:
             value = Utility.GetValidInput(this_title, f"Valor de {Letter} (V ou F):", ["V","F"])
@@ -32,7 +32,7 @@ def Read(equation: list):
             while Letter in sub_equation:
                 next_change = sub_equation.index(Letter)
                 sub_equation[next_change] = value
-                this_title = f"Resolver equação\n\n" + " ".join(map(str, sub_equation))
+                this_title = f"Resolver equação\n\n" + Utility.ShowEq(sub_equation)
     Utility.SetTitle(this_title)
     input("Equação pronta, enter para resolver")
     Utility.SetTitle("Resolver equação")
@@ -47,7 +47,7 @@ def Execute(array: list, steps: bool, mask: list):
         mask = [i for i in array]
         if steps:
             Utility.SetTitle(title)
-            print(' '.join(map(str,array)))
+            print(Utility.ShowEq(array))
         building = False
         #Construir o interior dos elementos dentro dos parênteses
         for i in range(len(array)):
@@ -76,9 +76,9 @@ def Execute(array: list, steps: bool, mask: list):
                 if steps:
                     Utility.SetTitle(title)
                     if len(mask):
-                        print(" ".join(map(str, mask[0])), " ".join(map(str, array)), " ".join(map(str, mask[1])))
+                        print(Utility.ShowEq(mask[0]),Utility.ShowEq(array),Utility.ShowEq(mask[1]))
                     else:
-                        print(" ".join(map(str, array)))
+                        print(Utility.ShowEq(array))
                     input()
                 #Encontrar próxima operação com sinal de inversão de valor
                 operation_index = array.index(symbol)
@@ -90,7 +90,7 @@ def Execute(array: list, steps: bool, mask: list):
                     array[operation_index-1] = Operate(symbol, a, b)
     if steps:
         Utility.SetTitle(title)
-        print(str(array[0]) + "\n")
+        print(Utility.ShowEq(array) + "\n")
     return array[0]
 
 #Função para adicionar símbolos possíveis
@@ -169,7 +169,3 @@ def Create():
 #Função pra adicionar equação ao banco
 def Add(equation: list, bank: list):
     bank.append(equation)
-
-#Função para mostrar uma equação na tela
-def Show(equation: list):
-    pass

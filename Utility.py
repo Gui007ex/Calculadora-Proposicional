@@ -46,3 +46,10 @@ def ChangeColor(string: str):
     codes = ["color 1", "color 2", "color 6", "color 4"]
     if string in colors:
         os.system(codes[colors.index(string)])
+
+def ShowEq(equation: list):
+    sub_equation = [i for i in equation]
+    sub_equation = " ".join(map(str, sub_equation))
+    sub_equation = sub_equation.replace("True", "V")
+    sub_equation = sub_equation.replace("False", "F")
+    return sub_equation

@@ -27,7 +27,8 @@ while True:
             if type(Index) == int:
                 equation = Equations_Bank[Index]
                 result = Calculator.Execute(Calculator.Read(equation), True, [])
-                input(f"Resultado da proposição: {str(result)}\n\nEnter para continuar")
+                result = {True: "Verdadeiro", False: "Falso"}[result]
+                input(f"Resultado da proposição: {result}\n\nEnter para continuar")
         case "B":
             Utility.SetTitle("Banco de proposições")
             if len(Equations_Bank):
