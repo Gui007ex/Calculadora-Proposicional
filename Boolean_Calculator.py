@@ -1,4 +1,4 @@
-import Utility
+import UI
 
 Global_Alf = ["P", "Q"]
 
@@ -24,18 +24,18 @@ def Operate(symbol: str, a: bool, b: bool):
 #Função para ler equação
 def Read(equation: list):
     sub_equation = [i for i in equation]
-    this_title = f"Resolver equação\n\n" + Utility.ShowEq(sub_equation)
+    this_title = f"Resolver equação\n\n" + UI.ShowEq(sub_equation)
     for Letter in Global_Alf:
         if Letter in sub_equation:
-            value = Utility.GetValidInput(this_title, f"Valor de {Letter} (V ou F):", ["V","F"])
+            value = UI.GetValidInput(this_title, f"Valor de {Letter} (V ou F):", ["V","F"])
             value = value.upper() == "V"
             while Letter in sub_equation:
                 next_change = sub_equation.index(Letter)
                 sub_equation[next_change] = value
-                this_title = f"Resolver equação\n\n" + Utility.ShowEq(sub_equation)
-    Utility.SetTitle(this_title)
+                this_title = f"Resolver equação\n\n" + UI.ShowEq(sub_equation)
+    UI.SetTitle(this_title)
     input("Equação pronta, enter para resolver")
-    Utility.SetTitle("Resolver equação")
+    UI.SetTitle("Resolver equação")
     return sub_equation
 
 #Função pra resolver uma equação válida
@@ -46,8 +46,8 @@ def Execute(array: list, steps: bool, mask: list):
     while "(" in array:
         mask = [i for i in array]
         if steps:
-            Utility.SetTitle(title)
-            print(Utility.ShowEq(array))
+            UI.SetTitle(title)
+            print(UI.ShowEq(array))
         building = False
         #Construir o interior dos elementos dentro dos parênteses
         for i in range(len(array)):
@@ -74,11 +74,11 @@ def Execute(array: list, steps: bool, mask: list):
             #Manter aquele símbolo até efetuar todos
             while symbol in array:
                 if steps:
-                    Utility.SetTitle(title)
+                    UI.SetTitle(title)
                     if len(mask):
-                        print(Utility.ShowEq(mask[0]),Utility.ShowEq(array),Utility.ShowEq(mask[1]))
+                        print(UI.ShowEq(mask[0]),UI.ShowEq(array),UI.ShowEq(mask[1]))
                     else:
-                        print(Utility.ShowEq(array))
+                        print(UI.ShowEq(array))
                     input()
                 #Encontrar próxima operação com sinal de inversão de valor
                 operation_index = array.index(symbol)
@@ -89,8 +89,8 @@ def Execute(array: list, steps: bool, mask: list):
                     a, b = array.pop(operation_index-1), array.pop(operation_index)
                     array[operation_index-1] = Operate(symbol, a, b)
     if steps:
-        Utility.SetTitle(title)
-        print(Utility.ShowEq(array) + "\n")
+        UI.SetTitle(title)
+        print(UI.ShowEq(array) + "\n")
     return array[0]
 
 #Função para adicionar símbolos possíveis
@@ -106,7 +106,7 @@ def Add_Symbol(possible: list, equation: list, closes: int, ready: bool):
         comands[i] += sufix
     comands = "\n".join(map(str, comands))
     while True:
-        Utility.SetTitle("Adicionar equação")
+        UI.SetTitle("Adicionar equação")
         if len(equation):
             print(f"{' '.join(equation)}\n")
         if closes == 0 and ready:
@@ -137,7 +137,7 @@ def Create():
         #Iniciar a pedida de símbolos possíveis
         next_command = Add_Symbol(avaiable, new_equation, closes_needed, can_finish)
         if next_command == "Exit":
-            Utility.SetTitle("Adicionar equação\n\n" + " ".join(new_equation))
+            UI.SetTitle("Adicionar equação\n\n" + " ".join(new_equation))
             break
         elif type(next_command) == str:
             new_equation.append(next_command)

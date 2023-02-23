@@ -1,11 +1,20 @@
 from random import randrange as rand
 from math import sin, cos, radians as rad
-import os
-os.system("cls")
+import UI
 
-bomb = "B"
-size = 10
-table = [[0 for i in range(size)] for j in range(size)]
+#Mostrar tabela do jogo com coordenadas nons eixos
+def ShowTable(matriz):
+    UI.SetTitle("Campo Minado")
+    print("   " + " ".join([alf[i] for i in range(len(matriz[0]))]))
+    print("   " + " ".join(["-" for i in range(len(matriz[0]))]))
+    for i in range(len(matriz)):
+        print(f"{alf[i]}| " + "|".join(map(str, matriz[i])) + f" |{alf[i]}")
+    print("   " + " ".join(["-" for i in range(len(matriz[0]))]))
+    print("   " + " ".join([alf[i] for i in range(len(matriz[0]))]))
+
+#Criar tabela x por y
+def Create(x, y):
+    return [[0 for i in range(x)] for j in range(y)]
 
 def Cos(angle):
     return round(cos(rad(angle)))
@@ -15,28 +24,87 @@ def Sin(angle):
 
 def AddAdjacent(x, y):
     for i in range(0, 360, 45):
+        X, Y = x+Cos(i), y+Sin(i)
         try:
-            table[x+Cos(i)][y+Sin(i)] += 1
+            if X>=0 and Y>=0:
+                table[X][Y] += 1
         except:
             pass
 
-def ShowTable():
-    for line in table:
-        print(" ".join(map(str, line)))
-
-def GenerateBombs(num):
-    while num > 0:
-        x, y = rand(size), rand(size)
-        if table[x][y] != bomb:
-            table[x][y] = bomb
-            num -= 1
-
+#Adicionar 1 aos adjacentes de bombas
 def PrepareNumbers():
-    for i in range(size):
-        for j in range(size):
+    for i in range(len(table)):
+        for j in range(len(table[0])):
             if table[i][j] == bomb:
                 AddAdjacent(i, j)
 
-GenerateBombs(10)
-PrepareNumbers()
-ShowTable()
+#Gerar bombas baseado no local da primeira jogada
+def GenerateBombs(bombs, f_x, f_y):
+    while bombs > 0:
+        x, y = rand(len(table)), rand(len(table[0]))
+        if table[x][y] != bomb and (abs(x-f_x) > 2 or abs(y-f_y) > 2):
+            table[x][y] = bomb
+            bombs -= 1
+    PrepareNumbers()
+
+def Reveal(x, y):
+    mask[x][y] = table[x][y]
+
+def GetInput():
+    while True:
+        coord = input("\nCoordenadas: ").replace(" ", "")
+        coord = coord.upper()
+        if len(coord) == 2 and coord[0] in y_alf and coord[1] in x_alf:
+            return alf.index(coord[0]), alf.index(coord[1])
+
+def Cleanse(x,y):
+    Reveal(x,y)
+    for i in range(0, 360, 45):
+        X, Y = x+Cos(i), y+Sin(i)
+        try:
+            if table[X][Y] != bomb and X>=0 and Y>=0:
+                Reveal(X,Y)
+                if table[X][Y] == 0:
+                    table[X][Y] = "0"
+                    Cleanse(X,Y)
+        except:
+            pass
+
+def ChooseSettings():
+    global table, x_alf, y_alf, bombs
+    table = Create(x=10, y=10)
+    x_alf = [alf[i] for i in range(len(table[0]))]
+    y_alf = [alf[i] for i in range(len(table))]
+    bombs = 20
+
+######################################################################################################
+
+bomb = "B"
+alf = "ABCDEFGHIJKLMNOPQRSTUVXWYZ"
+
+def Play():
+    ChooseSettings()
+
+    global mask
+    mask = [["X" for i in range(len(table[0]))] for j in range(len(table))]
+    playing = True
+
+    #Geração de bombas após primeiro comando
+    ShowTable(mask)
+    x, y = GetInput()
+    GenerateBombs(bombs, x, y)
+    Reveal(x,y)
+    Cleanse(x,y)
+
+    while playing:
+        ShowTable(mask)
+        x, y = GetInput()
+        if table[x][y] == 0:
+            Cleanse(x,y)
+        elif table[x][y] != bomb:
+            Reveal(x,y)
+        else:
+            Reveal(x,y)
+            ShowTable(table)
+            input("\nPerdeukkkjjkk")
+            playing = False

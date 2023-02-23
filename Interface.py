@@ -1,5 +1,5 @@
-import Utility, Boolean_Calculator as Calculator
-Utility.ChangeColor("Azul")
+import Mines, UI, Boolean_Calculator as Calculator
+UI.ChangeColor("Azul")
 
 Equations_Bank: list = [["~","P","v","Q","^","P"]]
 Comands = '''Calculadora Proposicional
@@ -13,7 +13,7 @@ E - Sair do código
 Comando:'''
 
 while True:
-    Utility.Clear()
+    UI.Clear()
     action = input(Comands).upper()
 
     match action: 
@@ -22,21 +22,23 @@ while True:
             input("Equação adicionada\n\nEnter para continuar")
         case "R":
             ambient = "Resolver equação"
-            Utility.SetTitle(ambient)
-            Index = Utility.GetBankEquation(Equations_Bank, ambient)
+            UI.SetTitle(ambient)
+            Index = UI.GetBankEquation(Equations_Bank, ambient)
             if type(Index) == int:
                 equation = Equations_Bank[Index]
                 result = Calculator.Execute(Calculator.Read(equation), True, [])
                 result = {True: "Verdadeiro", False: "Falso"}[result]
                 input(f"Resultado da proposição: {result}\n\nEnter para continuar")
         case "B":
-            Utility.SetTitle("Banco de proposições")
+            UI.SetTitle("Banco de proposições")
             if len(Equations_Bank):
-                Utility.ShowBank(Equations_Bank)
+                UI.ShowBank(Equations_Bank)
                 input("Enter para voltar")
             else:
                 input("Banco vazio, pressione enter para continuar...")        
         case "E":
             break
+        case "WILLIAM":
+            Mines.Play()
         case _:
-            Utility.ChangeColor(action)
+            UI.ChangeColor(action)
