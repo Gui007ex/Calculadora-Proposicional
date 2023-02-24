@@ -1,6 +1,6 @@
 import UI
 
-Global_Alf = ["J", "M", "F"]
+Global_Alf = ["P","Q","R"]
 
 #Função pra realizar operação
 def Operate(symbol: str, a: bool, b: bool):

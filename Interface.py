@@ -1,7 +1,7 @@
-import Mines, UI, Boolean_Calculator as Calculator
+import Fan, Mines, UI, Boolean_Calculator as Calculator
 UI.ChangeColor("Azul")
 
-Equations_Bank: list = [["~","P","v","Q","^","P"]]
+Equations_Bank: list = []
 Comands = '''Calculadora Proposicional
 
 A - Adicionar equação
@@ -40,5 +40,7 @@ while True:
             break
         case "WILLIAM":
             Mines.Play()
+        case "GPU":
+            Fan.Start()
         case _:
             UI.ChangeColor(action)
