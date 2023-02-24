@@ -169,3 +169,13 @@ def Create():
 #Função pra adicionar equação ao banco
 def Add(equation: list, bank: list):
     bank.append(equation)
+
+#Função para criar uma tabela verdade
+def GenerateTable(equation: list):
+    pass
+
+def GetVariations(num):
+    arr = [True for i in range(num)]
+    print(arr)
+
+GetVariations(2)
