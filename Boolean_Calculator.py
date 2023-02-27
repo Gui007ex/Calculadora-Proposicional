@@ -192,9 +192,19 @@ def GenerateTable(equation: list):
                 test_equation[i] = variation[item]
         results.append(Execute(test_equation, False, []))
     #Adicionar resultado ao array de variações
-    print(results)
+    for i in range(len(results)):
+        total_variations[i].append(results[i])
+        for j in range(len(total_variations[0])):
+            if total_variations[i][j]:
+                total_variations[i][j] = "V"
+            else:
+                total_variations[i][j] = "F"
     #Mostrar na tela os resultados
-    pass
+    result_names = [i for i in order]
+    result_names.append(" ".join(equation))
+    total_variations.insert(0, result_names)
+    for i in total_variations:
+        print(" | ".join(map(str, i)))
 
 def GetVariations(num):
     arr = [[0 for i in range(num)] for j in range(2**num)]
@@ -205,7 +215,3 @@ def GetVariations(num):
                 value = not value
             arr[j][i] = value
     return arr
-
-UI.Clear()
-arr_ex = ["P","v","Q","^","R","->","S"]
-GenerateTable(arr_ex)
