@@ -1,6 +1,6 @@
 import UI
 
-Global_Alf = ["P","Q","R"]
+Global_Alf = ["P","Q","R","S"]
 
 #Função pra realizar operação
 def Operate(symbol: str, a: bool, b: bool):
@@ -172,10 +172,40 @@ def Add(equation: list, bank: list):
 
 #Função para criar uma tabela verdade
 def GenerateTable(equation: list):
+    sub_equation = [i for i in equation]
+    #Saber quantas variáveis eu tenho
+    order = []
+    for letter in Global_Alf:
+        if letter in sub_equation:
+            order.append(letter)
+            while letter in sub_equation:
+                sub_equation[sub_equation.index(letter)] = order.index(letter)
+    #Gerar variações com N variáveis
+    total_variations = GetVariations(len(order))
+    #Executar para cada variação
+    results = []
+    for variation in total_variations:
+        test_equation = [i for i in sub_equation]
+        for i in range(len(test_equation)):
+            item = test_equation[i]
+            if type(item) == int:
+                test_equation[i] = variation[item]
+        results.append(Execute(test_equation, False, []))
+    #Adicionar resultado ao array de variações
+    print(results)
+    #Mostrar na tela os resultados
     pass
 
 def GetVariations(num):
-    arr = [True for i in range(num)]
-    print(arr)
+    arr = [[0 for i in range(num)] for j in range(2**num)]
+    for i in range(num):
+        value = False
+        for j in range(2**num):
+            if j % (2**num/(2**(i+1))) == 0:
+                value = not value
+            arr[j][i] = value
+    return arr
 
-GetVariations(2)
+UI.Clear()
+arr_ex = ["P","v","Q","^","R","->","S"]
+GenerateTable(arr_ex)

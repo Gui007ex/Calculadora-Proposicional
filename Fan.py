@@ -18,7 +18,7 @@ def Center():
 def ShowFan(i):
     os.system(rgb[i%len(rgb)])
     Clear()
-    print("RTX 4090 TI\n\n")
+    print("RTX 4090\n\n")
     print("/-----------------------------------------------------------------------------------------\\")
     for line in fan:
         print("|" + " ".join(line) + "|" + " ".join(line) + "|" + " ".join(line) + "|")
