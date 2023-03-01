@@ -1,25 +1,26 @@
 import UI
 
 Global_Alf = ["P","Q","R","S"]
+Global_Symbols = [["~","^","v","->","<>"],["não","e","ou","então","se, e somente se"]]
+Sym_Flag = False
 
 #Função pra realizar operação
 def Operate(symbol: str, a: bool, b: bool):
     #Navegar pelos símbolos e escolher a operação
-    match symbol: 
-        case "^":
-            return a and b
-        case "v":
-            return a or b
-        case "->":
-            if a and not b:
-                return False
-            else:
-                return True
-        case "<>":
-            if a == b:
-                return True
-            else:
-                return False
+    if symbol == Global_Symbols[int(Sym_Flag)][1]: 
+        return a and b
+    elif symbol == Global_Symbols[int(Sym_Flag)][2]:
+        return a or b
+    elif symbol == Global_Symbols[int(Sym_Flag)][3]:
+        if a and not b:
+            return False
+        else:
+            return True
+    elif symbol == Global_Symbols[int(Sym_Flag)][4]:
+        if a == b:
+            return True
+        else:
+            return False
 
 #Função para ler equação
 def Read(equation: list):
@@ -40,8 +41,7 @@ def Read(equation: list):
 
 #Função pra resolver uma equação válida
 def Execute(array: list, steps: bool, mask: list):
-    title = "Resolver Equação"
-    Op_Symbols = ["~","^","v","->","<>"]
+    title = "Resolver equação"
     #Procurar parênteses para encontrar as prioridades
     while "(" in array:
         mask = [i for i in array]
@@ -63,14 +63,14 @@ def Execute(array: list, steps: bool, mask: list):
         #mask = [[antes], [meio], [depois]]
         Total_Deletes = len(PriorArray)+1
         mask = [array[:Delete_Flag+1], array[Delete_Flag+Total_Deletes:]]
-        array[Delete_Flag] = Execute(PriorArray, True, mask)
+        array[Delete_Flag] = Execute(PriorArray, steps, mask)
         del array[Delete_Flag+1:Delete_Flag+1+Total_Deletes]
         mask = []
         
     #Passar pelos valores da lista até encontrar uma operação (enquanto seu tamanho for maior que 1)
     while len(array) > 1:
         #Navegar pelos símbolos em ordem de precedência
-        for symbol in Op_Symbols:
+        for symbol in Global_Symbols[int(Sym_Flag)]:
             #Manter aquele símbolo até efetuar todos
             while symbol in array:
                 if steps:
@@ -82,7 +82,7 @@ def Execute(array: list, steps: bool, mask: list):
                     input()
                 #Encontrar próxima operação com sinal de inversão de valor
                 operation_index = array.index(symbol)
-                if symbol == Op_Symbols[0]:
+                if symbol == Global_Symbols[int(Sym_Flag)][0]:
                     a = array.pop(operation_index+1)
                     array[operation_index] = not a
                 else:
@@ -130,7 +130,8 @@ def Add_Symbol(possible: list, equation: list, closes: int, ready: bool):
 def Create():
     new_equation: list = []
     #Valores iniciais possíveis = "~", "VAR", "("
-    avaiable = ["~","(","Variáveis:"]
+    _not = Global_Symbols[int(Sym_Flag)][0]
+    avaiable = [_not,"(","Variáveis:"]
     closes_needed, can_finish = 0, False
 
     while True:
@@ -148,19 +149,18 @@ def Create():
         last = new_equation[-1]
         can_finish = last in Global_Alf or last == ")"
         if last in Global_Alf:
-            avaiable = ["^","v","->","<>"]
+            avaiable = Global_Symbols[int(Sym_Flag)][1:]
         else:
-            match new_equation[-1]:
-                case "~":
-                    avaiable = ["(", "Variáveis:"]
-                case "^" | "v" | "->" | "<>":
-                    avaiable = ["~", "(", "Variáveis:"]
-                case "(":
-                    closes_needed += 1
-                    avaiable = ["~", "(", "Variáveis:"]
-                case ")":
-                    closes_needed -= 1
-                    avaiable = ["^","v","->","<>"]
+            if last == _not:
+                avaiable = ["(", "Variáveis:"]
+            elif last in Global_Symbols[int(Sym_Flag)][1:]:
+                avaiable = [_not, "(", "Variáveis:"]
+            elif last == "(":
+                closes_needed += 1
+                avaiable = [_not, "(", "Variáveis:"]
+            elif last == ")":
+                closes_needed -= 1
+                avaiable = Global_Symbols[Sym_Flag][1:]
         if closes_needed > 0 and (last in Global_Alf or last == ")"):
             avaiable.insert(0, ")")
     
@@ -171,42 +171,65 @@ def Add(equation: list, bank: list):
     bank.append(equation)
 
 #Função para criar uma tabela verdade
-def GenerateTable(equation: list):
-    sub_equation = [i for i in equation]
+def GenerateTable(equations: list):
+    all_tests = [i for i in equations]
+    test_types, total_equations, total_results, order = [],[],[],[]
     #Saber quantas variáveis eu tenho
-    order = []
-    for letter in Global_Alf:
-        if letter in sub_equation:
-            order.append(letter)
-            while letter in sub_equation:
-                sub_equation[sub_equation.index(letter)] = order.index(letter)
-    #Gerar variações com N variáveis
-    total_variations = GetVariations(len(order))
-    #Executar para cada variação
-    results = []
-    for variation in total_variations:
-        test_equation = [i for i in sub_equation]
-        for i in range(len(test_equation)):
-            item = test_equation[i]
-            if type(item) == int:
-                test_equation[i] = variation[item]
-        results.append(Execute(test_equation, False, []))
+    for equation in all_tests:
+        for letter in Global_Alf:
+            if letter in equation and letter not in order:
+                order.insert(Global_Alf.index(letter), letter)
+    #Executar pra cada equação
+    for equation in all_tests:
+        #Substituir variáveis por números de referência
+        total_equations.append(" ".join(equation))
+        equation = [i for i in equation]
+        for letter in Global_Alf:
+            if letter in equation:
+                while letter in equation:
+                    equation[equation.index(letter)] = order.index(letter)
+        #Gerar variações com N variáveis
+        total_variations = GetVariations(len(order))
+        #Executar para cada variação
+        this_result = []
+        for variation in total_variations:
+            test_equation = [i for i in equation]
+            for i in range(len(test_equation)):
+                item = test_equation[i]
+                if type(item) == int:
+                    test_equation[i] = variation[item]
+            this_result.append(Execute(test_equation, False, []))
+        total_results.append(this_result)
+        if this_result.count(True) == 0:
+            test_types.append("Contradição")
+        elif this_result.count(False) == 0:
+            test_types.append("Tautologia")
+        else:
+            test_types.append("...")
     #Adicionar resultado ao array de variações
-    for i in range(len(results)):
-        total_variations[i].append(results[i])
-        for j in range(len(total_variations[0])):
-            if total_variations[i][j]:
-                total_variations[i][j] = "V"
-            else:
-                total_variations[i][j] = "F"
+    space, comp = 0, 0
+    for result in total_results:
+        for i in range(len(result)):
+            total_variations[i].append(result[i])
+            for j in range(len(total_variations[0])):
+                space = 0
+                if j >= len(order):
+                    equation_size = len(total_equations[j-len(order)])/2
+                    comp = 1 if equation_size%1==0 else 0
+                    space = int(equation_size)
+                match total_variations[i][j]:
+                    case True:
+                        total_variations[i][j] = " "*space + "V" + " "*(space-comp)
+                    case False:
+                        total_variations[i][j] = " "*space + "F" + " "*(space-comp)
     #Mostrar na tela os resultados
-    result_names = [i for i in order]
-    result_names.append(" ".join(equation))
+    result_names = [i for i in order + total_equations]
     total_variations.insert(0, result_names)
     for i in total_variations:
         print(" | ".join(map(str, i)))
 
-def GetVariations(num):
+#Gerar variações de possibilidades baseadas em uma quatidade de variáveis
+def GetVariations(num: int):
     arr = [[0 for i in range(num)] for j in range(2**num)]
     for i in range(num):
         value = False
@@ -215,3 +238,11 @@ def GetVariations(num):
                 value = not value
             arr[j][i] = value
     return arr
+
+def SwitchReading(bank: list):
+    for equation in bank:
+        for i in range(len(equation)):
+            old_array = Global_Symbols[int(not Sym_Flag)]
+            new_array = Global_Symbols[int(Sym_Flag)]
+            if equation[i] in old_array:
+                equation[i] = new_array[old_array.index(equation[i])]

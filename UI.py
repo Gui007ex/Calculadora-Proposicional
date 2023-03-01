@@ -53,3 +53,19 @@ def ShowEq(equation: list):
     sub_equation = sub_equation.replace("True", "V")
     sub_equation = sub_equation.replace("False", "F")
     return sub_equation
+
+def GetEquationsArray(bank: list, ambient: str):
+    equations_array, display, selected, finish_flag = [], "", "", ""
+    while True:
+        Index = GetBankEquation(bank, f"{ambient} {display} {finish_flag}")
+        if type(Index) == int:
+            if bank[Index] not in equations_array:
+                equations_array.append(bank[Index])
+                selected += str(Index+1)+" "
+                display = "\n\nSelecionados: " + ",".join(selected.split(" ")[:-1])
+                if len(equations_array) == 2:
+                    finish_flag = "\n\n(E) para finalizar seleção"
+            SetTitle(f"{ambient} {display} {finish_flag}")
+        elif Index == "Exit" and len(equations_array) >= 2:
+            return equations_array
+

@@ -1,14 +1,16 @@
-import Fan, Mines, UI, Boolean_Calculator as Calculator
-UI.ChangeColor("Azul")
+import Fan, Mines, UI, Boolean_Calculator as Calculator, Options
+UI.ChangeColor("AZUL")
 
-Equations_Bank: list = [["P","v","Q","^","P","->","Q"]]
+Equations_Bank: list = []
 Comands = '''Calculadora Proposicional
 
 A - Adicionar equação
 R - Resolver equação
-T - Gerar tabela verdade
+T - Tabela verdade
+C - Comparação de tabelas
 -------------------------
 B - Mostrar banco
+O - Opções
 E - Sair do código
 
 Comando:'''
@@ -37,15 +39,24 @@ while True:
             if type(Index) == int:
                 equation = Equations_Bank[Index]
                 UI.SetTitle(ambient)
-                Calculator.GenerateTable(equation)
-                input("Enter para continuar")
+                Calculator.GenerateTable([equation])
+                input("\nEnter para continuar")
+        case "C":
+            ambient = "Comparação de tabelas"
+            UI.SetTitle(ambient)
+            equations = UI.GetEquationsArray(Equations_Bank, ambient)
+            UI.SetTitle(ambient)
+            Calculator.GenerateTable(equations)
+            input("\nEnter para continuar")
         case "B":
             UI.SetTitle("Banco de proposições")
             if len(Equations_Bank):
                 UI.ShowBank(Equations_Bank)
                 input("Enter para voltar")
             else:
-                input("Banco vazio, pressione enter para continuar...")        
+                input("Banco vazio, pressione enter para continuar...")    
+        case "O":
+            Options.Configure(Equations_Bank)
         case "E":
             break
         case "WILLIAM":
