@@ -205,7 +205,7 @@ def GenerateTable(equations: list):
         elif this_result.count(False) == 0:
             test_types.append("Tautologia")
         else:
-            test_types.append("...")
+            test_types.append("Contingência")
     #Adicionar resultado ao array de variações
     space, comp = 0, 0
     for result in total_results:
@@ -227,6 +227,9 @@ def GenerateTable(equations: list):
     total_variations.insert(0, result_names)
     for i in total_variations:
         print(" | ".join(map(str, i)))
+    print()
+    for i in range(len(all_tests)):
+        print(" ".join(all_tests[i]) + f" = {test_types[i]}")
 
 #Gerar variações de possibilidades baseadas em uma quatidade de variáveis
 def GetVariations(num: int):

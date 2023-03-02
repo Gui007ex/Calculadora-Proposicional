@@ -50,12 +50,15 @@ def GenerateBombs(bombs, f_x, f_y):
 def Reveal(x, y):
     mask[x][y] = table[x][y]
 
-def GetInput():
+def GetInput(first):
     while True:
+        ShowTable(mask)
         coord = input("\nCoordenadas: ").replace(" ", "")
         coord = coord.upper()
         if len(coord) == 2 and coord[0] in y_alf and coord[1] in x_alf:
             return alf.index(coord[0]), alf.index(coord[1])
+        if len(coord) == 3 and coord[0].upper() == "F" and coord[1] in y_alf and coord[2] in x_alf and not first:
+            return coord[0].upper(), [alf.index(coord[1]), alf.index(coord[2])]
 
 def Cleanse(x,y):
     Reveal(x,y)
@@ -72,10 +75,10 @@ def Cleanse(x,y):
 
 def ChooseSettings():
     global table, x_alf, y_alf, bombs
-    table = Create(x=10, y=10)
+    table = Create(x=20, y=20)
     x_alf = [alf[i] for i in range(len(table[0]))]
     y_alf = [alf[i] for i in range(len(table))]
-    bombs = 20
+    bombs = 80
 
 ######################################################################################################
 
@@ -91,15 +94,18 @@ def Play():
 
     #Geração de bombas após primeiro comando
     ShowTable(mask)
-    x, y = GetInput()
+    x, y = GetInput(True)
     GenerateBombs(bombs, x, y)
     Reveal(x,y)
     Cleanse(x,y)
 
     while playing:
-        ShowTable(mask)
-        x, y = GetInput()
-        if table[x][y] == 0:
+        x, y = GetInput(False)
+        if x == "F":
+            x, y = map(int,y)
+            if mask[x][y] == "X":
+                mask[x][y] = "F"
+        elif table[x][y] == 0:
             Cleanse(x,y)
         elif table[x][y] != bomb:
             Reveal(x,y)

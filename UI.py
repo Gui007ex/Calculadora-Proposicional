@@ -42,8 +42,8 @@ def GetValidInput(title: str, string: str, entry: list):
         SetTitle(title)
 
 def ChangeColor(string: str):
-    colors = ["AZUL", "VERDE", "AMARELO", "VERMELHO"]
-    codes = ["color 1", "color 2", "color 6", "color 4"]
+    colors = ["AZUL", "VERDE", "AMARELO", "VERMELHO", "BRANCO"]
+    codes = ["color 1", "color 2", "color 6", "color 4", "color 7"]
     if string in colors:
         os.system(codes[colors.index(string)])
 
@@ -68,4 +68,6 @@ def GetEquationsArray(bank: list, ambient: str):
             SetTitle(f"{ambient} {display} {finish_flag}")
         elif Index == "Exit" and len(equations_array) >= 2:
             return equations_array
+        elif Index == "Empty":
+            return "Empty"
 
