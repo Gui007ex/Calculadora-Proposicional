@@ -43,15 +43,24 @@ while True:
                 input("\nEnter para continuar")
         case "C":
             ambient = "Comparação de tabelas"
+<<<<<<< HEAD
             if len(Equations_Bank) > 1:
                 UI.SetTitle(ambient)
+=======
+            UI.SetTitle(ambient)
+            if len(Equations_Bank) > 1:
+>>>>>>> de71ac515b52db4d28121bacf12f48150d462851
                 equations = UI.GetEquationsArray(Equations_Bank, ambient)
                 UI.SetTitle(ambient)
                 Calculator.GenerateTable(equations)
                 input("\nEnter para continuar")
             else:
+<<<<<<< HEAD
                 UI.SetTitle(ambient)
                 input("Sem equações o suficiente para comparar")
+=======
+                input("Sem equações o suficiente pra comparar")
+>>>>>>> de71ac515b52db4d28121bacf12f48150d462851
         case "B":
             UI.SetTitle("Banco de proposições")
             if len(Equations_Bank):
