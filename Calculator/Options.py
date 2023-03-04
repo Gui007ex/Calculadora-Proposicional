@@ -1,4 +1,5 @@
-import UI, Boolean_Calculator as Calculator
+from Extras_ import UI
+from Calculator import Boolean_Calculator as Calculator
 
 Read_Modes, read_switch = ["simbólico", "escrito"], False
 

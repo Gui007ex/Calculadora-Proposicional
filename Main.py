@@ -1,4 +1,5 @@
-import Fan, Mines, UI, Boolean_Calculator as Calculator, Options
+from Extras_ import UI, Fan, Mines
+from Calculator import Options, Boolean_Calculator as Calculator
 UI.ChangeColor("AZUL")
 
 Equations_Bank: list = [
@@ -19,7 +20,7 @@ Equations_Bank: list = [
     ['P','v','(','R','v','S',')'],
     ['(','P','v','R',')','v','S'],
     ['P','^','(','R','^','S',')'],
-    ['(','P','^','R',')','^','S',')'],
+    ['(','P','^','R',')','^','S'],
     ['P','v','(','R','^','S',')'],
     ['P','^','(','R','v','S',')'],
     ['(','P','v','R',')','^','(','P','v','S',')'],
@@ -68,8 +69,6 @@ while True:
                 input("\nEnter para continuar")
         case "C":
             ambient = "Comparação de tabelas"
-            if len(Equations_Bank) > 1:
-                UI.SetTitle(ambient)
             UI.SetTitle(ambient)
             if len(Equations_Bank) > 1:
                 equations = UI.GetEquationsArray(Equations_Bank, ambient)

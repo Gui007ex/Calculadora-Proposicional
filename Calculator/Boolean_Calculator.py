@@ -1,4 +1,4 @@
-import UI
+from Extras_ import UI
 
 Global_Alf = ["P","Q","R","S"]
 Global_Symbols = [["~","^","v","->","<>"],["não","e","ou","então","se, e somente se"]]

@@ -1,5 +1,5 @@
 from time import sleep
-from UI import Clear
+from Extras_ import UI
 import os
 
 rgb = ["color 1", "color 2", "color 6", "color 4"]
@@ -17,7 +17,7 @@ def Center():
 
 def ShowFan(i):
     os.system(rgb[i%len(rgb)])
-    Clear()
+    UI.Clear()
     print("RTX 4090\n\n")
     print("/-----------------------------------------------------------------------------------------\\")
     for line in fan:

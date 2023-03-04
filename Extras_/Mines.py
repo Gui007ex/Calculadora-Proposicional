@@ -1,6 +1,6 @@
 from random import randrange as rand
 from math import sin, cos, radians as rad
-import UI
+from Extras_ import UI
 
 #Mostrar tabela do jogo com coordenadas nons eixos
 def ShowTable(matriz):
