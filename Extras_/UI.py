@@ -42,10 +42,9 @@ def GetValidInput(title: str, string: str, entry: list):
         SetTitle(title)
 
 def ChangeColor(string: str):
-    colors = ["AZUL", "VERDE", "AMARELO", "VERMELHO", "BRANCO"]
-    codes = ["color 1", "color 2", "color 6", "color 4", "color 7"]
+    colors = {"AZUL":"color 1", "VERDE":"color 2", "AMARELO":"color 6", "VERMELHO":"color 4", "BRANCO":"color 7"}
     if string in colors:
-        os.system(codes[colors.index(string)])
+        os.system(colors[string])
 
 def ShowEq(equation: list):
     sub_equation = [i for i in equation]
