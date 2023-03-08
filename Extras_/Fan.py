@@ -114,7 +114,7 @@ def Start():
                         move_down = False
             Sum_Y()
             Sum_X()
-            sleep(0.01)
+            sleep(0.001)
         i+=1
         #Segunda movimentação
         Sub_X()
@@ -145,5 +145,5 @@ def Start():
                         move_down = False
             Sub_X()
             Sub_Y()
-            sleep(0.01)
+            sleep(0.001)
         i+=1
