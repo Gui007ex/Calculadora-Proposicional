@@ -1,3 +1,4 @@
+#Randandandanda
 from Extras_ import UI, Fan, Mines
 from Calculator import Options, Boolean_Calculator as Calculator
 UI.ChangeColor("AZUL")
