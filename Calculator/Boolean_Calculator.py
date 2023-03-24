@@ -1,6 +1,6 @@
 from Extras_ import UI
 
-Global_Alf = ["P","Q","R","S"]
+Global_Alf = ["P","Q","R","S","T"]
 Global_Symbols = [["~","^","v","->","<>"],["não","e","ou","então","se, e somente se"]]
 Sym_Flag = False
 
